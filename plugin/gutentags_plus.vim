@@ -21,7 +21,7 @@ let g:gutentags_auto_add_gtags_cscope = 0
 
 
 "----------------------------------------------------------------------
-" strip heading and ending spaces 
+" strip heading and ending spaces
 "----------------------------------------------------------------------
 function! s:string_strip(text)
 	return substitute(a:text, '^\s*\(.\{-}\)\s*$', '\1', '')
@@ -184,7 +184,7 @@ function! s:quickfix_open(size)
 		endif
 	endfunc
 	let s:quickfix_open = 0
-	let l:winnr = winnr()			
+	let l:winnr = winnr()
 	noautocmd windo call s:WindowCheck(0)
 	noautocmd silent! exec ''.l:winnr.'wincmd w'
 	if s:quickfix_open != 0
@@ -206,14 +206,16 @@ endfunc
 " Find search
 "----------------------------------------------------------------------
 function! s:GscopeFind(bang, what, ...)
-	let keyword = (a:0 > 0)? a:1 : ''
+	"let keyword = (a:0 > 0)? a:1 : ''
+    let keyword = (a:0 > 0)? a:1 : expand('<cword>')
 	let dbname = s:get_gtags_file()
 	let root = get(b:, 'gutentags_root', '')
 	if (dbname == '' || root == '') && a:what != 'z'
 		call s:ErrorMsg("no gtags database for this project, check gutentags's documents")
 		return 0
 	endif
-	if a:0 == 0 || keyword == ''
+	"if a:0 == 0 || keyword == ''
+	if keyword == ''
 		redraw! | echo '' | redraw!
 		echohl ErrorMsg
 		echom 'E560: Usage: GscopeFind a|c|d|e|f|g|i|s|t|z name'
@@ -470,7 +472,7 @@ function! s:signature(funname, fn_only, filetype)
 				continue
 			elseif ft == 'cs' && ename != 'cs'
 				continue
-			elseif ft == 'php' 
+			elseif ft == 'php'
 				if index(['php', 'php4', 'php5', 'php6'], ename) < 0
 					continue
 				endif
@@ -710,5 +712,3 @@ if get(g:, 'gutentags_plus_nomap', 0) == 0
 	nmap <silent> <leader>cz <Plug>GscopeFindCtag
 	nmap <silent> <leader>ck :GscopeKill<cr>
 endif
-
-
